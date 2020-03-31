@@ -2,9 +2,10 @@
   "name": "zoomcorder",
   "version": "1.0.0",
   "description": "Schedule Zoom Recordings",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/HarryMellsop/zoomcorder/issues"
   },
-  "homepage": "https://github.com/HarryMellsop/zoomcorder#readme"
+  "homepage": "https://github.com/HarryMellsop/zoomcorder#readme",
+  "devDependencies": {
+    "electron": "^8.2.0"
+  }
 }
