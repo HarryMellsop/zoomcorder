@@ -21,6 +21,9 @@
     "electron": "^8.2.0"
   },
   "dependencies": {
-    "puppeteer": "^2.1.1"
+    "path": "^0.12.7",
+    "puppeteer": "^2.1.1",
+    "puppeteer-recorder": "^1.0.7",
+    "screencap": "^1.0.0"
   }
 }

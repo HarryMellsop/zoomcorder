@@ -1,3 +1,3 @@
 # zoomcorder
 
-Record Zoom meetings automagically
+Record Zoom meetings automagically.

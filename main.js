@@ -1,9 +1,63 @@
 const { app, BrowserWindow } = require('electron')
 var path = require('path')
+const puppeteer = require('puppeteer')
+const screencap = require('screencap');
+const { record } = require('puppeteer-recorder');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
+
+function blank() {
+    return true;
+}
+
+function createPuppetWindow(url, password, name) {
+    (async () => {
+        // change this back to being in headless mode after we are finished; keep the app cleaner
+        const browser = await puppeteer.launch({headless: false});
+        const page = await browser.newPage();
+        await page.goto(url);
+    
+        // type the password into the textbox and log in
+        const passwordbox = await page.$('#inputpasscode');
+        await passwordbox.click({clickCount: 3});
+        await page.keyboard.type(password);
+
+        const namebox = await page.$('#inputname');
+        await namebox.click({clickCount: 3});
+        await page.keyboard.type(name);
+
+        const joinbtn = await page.$('#joinBtn');
+        await joinbtn.click({clickCount: 3});
+
+        // the page will now redirect, so we wait for the video
+        console.log("Waiting for the video");
+        await page.waitForSelector('#main-video');
+        const videoCanvas = await page.$('#main-video');
+
+        await new Promise(r => setTimeout(r, 5000));
+
+        // remove the annoying dialogue selector that pops up
+        await page.evaluate((sel) => {
+            var elements = document.querySelectorAll(sel);
+            for(var i=0; i< elements.length; i++){
+                elements[i].parentNode.removeChild(elements[i]);
+            }
+        }, '#dialog-join')
+
+        // start recording the screen and audio
+        await record({
+            browser: browser, // Optional: a puppeteer Browser instance,
+            page, // Optional: a puppeteer Page instance,
+            output: 'output.webm',
+            fps: 24,
+            frames: 24 * 5, // 5 seconds at 60 fps,
+            prepare: function () {}, // <-- add this line
+            render: function () {} // <-- add this line
+          });
+    })();
+}
 
 function createWindow () {
   // Create the browser window.
@@ -34,6 +88,7 @@ function createWindow () {
     //win = null
     app.quit()
   })
+  createPuppetWindow('https://success.zoom.us/wc/join/630591375', '998141', 'Harold Virtual')
 }
 
 // This method will be called when Electron has finished
@@ -54,7 +109,7 @@ app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (win === null) {
-    createWindow()
+    createWindow();
   }
 })
 
