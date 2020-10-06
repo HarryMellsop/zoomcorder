@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/HarryMellsop/zoomcorder#readme",
   "devDependencies": {
-    "electron": "^8.2.0"
+    "electron": "^8.5.1"
   },
   "dependencies": {
     "path": "^0.12.7",
